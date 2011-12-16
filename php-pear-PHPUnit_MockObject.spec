@@ -3,7 +3,7 @@
 Summary:	Mock Object library for PHPUnit
 Name:		php-pear-%{upstream_name}
 Version:	1.1.0
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	BSD
 Group:		Development/PHP
 URL:		http://www.phpunit.de/
@@ -61,7 +61,7 @@ pear install --nodeps --soft --force --register-only \
 %if %mdkversion < 201000
 if [ "$1" -eq "0" ]; then
     pear uninstall --nodeps --ignore-errors --register-only \
-        %{pear_name} >/dev/null || :
+        %{upstream_name} >/dev/null || :
 fi
 %endif
 

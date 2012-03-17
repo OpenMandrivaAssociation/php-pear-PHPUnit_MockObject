@@ -1,74 +1,72 @@
 %define  upstream_name PHPUnit_MockObject
+%define peardir %(pear config-get php_dir 2> /dev/null || echo %{_datadir}/pear)
+%define xmldir  /var/lib/pear
 
-Summary:	Mock Object library for PHPUnit
-Name:		php-pear-%{upstream_name}
-Version:	1.1.0
-Release:	%mkrel 2
-License:	BSD
-Group:		Development/PHP
-URL:		http://www.phpunit.de/
-Source0:	http://pear.phpunit.de/get/PHPUnit_MockObject-%{version}.tgz
-Requires(post): php-pear
-Requires(preun): php-pear
-Requires:	php-cli >= 3:5.2.1
-Requires:	php-pear >= 1:1.9.4
-Requires:	php-channel-phpunit
-BuildArch:	noarch
-BuildRequires:	php-pear
-BuildRequires:	php-channel-phpunit
-Suggests:	php-pear-PHPUnit >= 3.6.3
-Suggests:	php-pear-Text_Template >= 1.1.1
-Suggests:	php-soap
-Conflicts:	php-pear-PHPUnit < 3.6.3
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Summary: 	Mock Object library for PHPUnit
+Name: 		php-pear-%{upstream_name}
+Version: 	1.1.1
+Release: 	%mkrel 1
+License: 	BSD
+Group: 		Development/PHP
+Source0: 	http://pear.phpunit.de/get/PHPUnit_MockObject-%{version}.tgz
+URL: 		http://pear.phpunit.de/package/PHPUnit_MockObject
+BuildRequires: 	php-pear >= 1.4.7
+BuildRequires: 	php-channel-phpunit
+Requires: 	php-pear-Text_Template >= 1.1.1
+Requires:	php-pear >= 1.9.4
+Requires: 	php-channel-phpunit
+BuildArch: 	noarch
 
 %description
-PHPUnit is a regression testing framework used by the developer who implements
-unit tests in PHP.
-
-This package provides the Mock Object library for PHPUnit.
+Mock Object library for PHPUnit
 
 %prep
-
-%setup -q -c 
-mv package.xml %{upstream_name}-%{version}/%{upstream_name}.xml
+%setup -c -T
+pear -v -c pearrc \
+        -d php_dir=%{peardir} \
+        -d doc_dir=/docs \
+        -d bin_dir=%{_bindir} \
+        -d data_dir=%{peardir}/data \
+        -d test_dir=%{peardir}/tests \
+        -d ext_dir=%{_libdir} \
+        -s
 
 %build
 
 %install
 rm -rf %{buildroot}
+pear -c pearrc install --nodeps --packagingroot %{buildroot} %{SOURCE0}
+        
+# Clean up unnecessary files
+rm pearrc
+rm %{buildroot}/%{peardir}/.filemap
+rm %{buildroot}/%{peardir}/.lock
+rm -rf %{buildroot}/%{peardir}/.registry
+rm -rf %{buildroot}%{peardir}/.channels
+rm %{buildroot}%{peardir}/.depdb
+rm %{buildroot}%{peardir}/.depdblock
 
-cd %{upstream_name}-%{version}
-pear install --nodeps --packagingroot %{buildroot} %{upstream_name}.xml
-rm -rf %{buildroot}%{_datadir}/pear/.??*
+mv %{buildroot}/docs .
 
-rm -rf %{buildroot}%{_datadir}/pear/docs
-rm -rf %{buildroot}%{_datadir}/pear/tests
 
-install -d %{buildroot}%{_datadir}/pear/packages
-install -m 644 %{upstream_name}.xml %{buildroot}%{_datadir}/pear/packages
+# Install XML package description
+mkdir -p %{buildroot}%{xmldir}
+tar -xzf %{SOURCE0} package.xml
+cp -p package.xml %{buildroot}%{xmldir}/PHPUnit_MockObject.xml
 
 %clean
 rm -rf %{buildroot}
 
 %post
-%if %mdkversion < 201000
-pear install --nodeps --soft --force --register-only \
-    %{_datadir}/pear/packages/%{upstream_name}.xml >/dev/null || :
-%endif
+pear install --nodeps --soft --force --register-only %{xmldir}/PHPUnit_MockObject.xml
 
-%preun
-%if %mdkversion < 201000
+%postun
 if [ "$1" -eq "0" ]; then
-    pear uninstall --nodeps --ignore-errors --register-only \
-        %{upstream_name} >/dev/null || :
+    pear uninstall --nodeps --ignore-errors --register-only pear.phpunit.de/PHPUnit_MockObject
 fi
-%endif
 
 %files
 %defattr(-,root,root)
-%doc %{upstream_name}-%{version}/ChangeLog.markdown
-%doc %{upstream_name}-%{version}/LICENSE
-%{_datadir}/pear/PHPUnit/Framework/MockObject
-%{_datadir}/pear/packages/PHPUnit_MockObject.xml
-
+%doc docs/PHPUnit_MockObject/*
+%{peardir}/*
+%{xmldir}/PHPUnit_MockObject.xml

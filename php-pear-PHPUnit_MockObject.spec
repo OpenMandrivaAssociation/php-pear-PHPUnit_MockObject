@@ -70,3 +70,26 @@ fi
 %doc docs/PHPUnit_MockObject/*
 %{peardir}/*
 %{xmldir}/PHPUnit_MockObject.xml
+
+
+%changelog
+* Tue Mar 27 2012 Thomas Spuhler <tspuhler@mandriva.org> 1.1.1-2mdv2012.0
++ Revision: 787367
+- rebuilt
+
+* Sat Mar 17 2012 Thomas Spuhler <tspuhler@mandriva.org> 1.1.1-1
++ Revision: 785452
+- upgrade to 1.1.1
+  pearize specfile
+
+* Fri Dec 16 2011 Oden Eriksson <oeriksson@mandriva.com> 1.1.0-2
++ Revision: 742185
+- fix major breakage by careless packager
+
+* Wed Nov 16 2011 Oden Eriksson <oeriksson@mandriva.com> 1.1.0-1
++ Revision: 730887
+- import php-pear-PHPUnit_MockObject
+
+
+* Wed Nov 16 2011 Oden Eriksson <oeriksson@mandriva.com> 1.1.0-1mdv2010.2
+- initial Mandriva package

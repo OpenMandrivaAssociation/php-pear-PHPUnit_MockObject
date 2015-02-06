@@ -5,7 +5,7 @@
 Summary: 	Mock Object library for PHPUnit
 Name: 		php-pear-%{upstream_name}
 Version: 	1.2.3
-Release: 	1
+Release: 	2
 License: 	BSD
 Group: 		Development/PHP
 Source0: 	http://pear.phpunit.de/get/PHPUnit_MockObject-%{version}.tgz

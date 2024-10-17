@@ -9,7 +9,7 @@ Release: 	2
 License: 	BSD
 Group: 		Development/PHP
 Source0: 	http://pear.phpunit.de/get/PHPUnit_MockObject-%{version}.tgz
-URL: 		http://pear.phpunit.de/package/PHPUnit_MockObject
+URL: 		https://pear.phpunit.de/package/PHPUnit_MockObject
 BuildRequires: 	php-pear >= 1.4.7
 BuildRequires: 	php-channel-phpunit
 Requires: 	php-pear-Text_Template >= 1.1.1
